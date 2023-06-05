@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 
 
 using namespace std;
@@ -174,7 +175,7 @@ struct Confronto{
                         if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
                             cout << lado1.getNome() << " ataca " << lado2.getNome() << endl;
                             lado1.atacar(lado2);
-                            if(lado2.getSaude() < 0){
+                            if(lado2.getSaude() <= 0){
                                 cout << lado2.getNome() << " morreu. ";
                                 cout << lado1.getNome() << " venceu " << lado2.getNome()<<endl;
                                 cout << endl;
@@ -197,7 +198,8 @@ struct Confronto{
                         if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
                             cout << lado2.getNome() << " ataca " << lado1.getNome() << endl;
                             lado2.atacar(lado1);
-                            if(lado1.getSaude() < 0){
+
+                            if(lado1.getSaude() <= 0){
                                 cout << lado1.getNome() << " morreu. ";
 
                                     cout << lado2.getNome() << " venceu " << lado1.getNome()<<endl;
@@ -232,7 +234,6 @@ struct Confronto{
             while(combatentes.size() != 1){
                 cout << "       LUTA: " << i << endl; 
                 lutar(combatentes[0], combatentes[1]);
-
                 i++;
             }
 
@@ -263,7 +264,9 @@ void GeraAleatorios(int numeros[], int quantNumeros, int Limite){
 
 
 int main(){
-    Sauron s1("Sauron", 100, 30);
+    srand(time(NULL));
+
+    Sauron s1("Sauron", 7, 30);
     Mago m1("Gandolfi", 40, 5);
 
     Orc  o1("Orc 1", 50, 10);
@@ -326,18 +329,18 @@ int main(){
     c1.combatentes.push_back(e3);
     c1.combatentes.push_back(e4);
     c1.combatentes.push_back(e5);
-    // c1.combatentes.push_back(h1);
-    // c1.combatentes.push_back(h2);
-    // c1.combatentes.push_back(h3);
-    // c1.combatentes.push_back(h4);
-    // c1.combatentes.push_back(h5);
+    c1.combatentes.push_back(h1);
+    c1.combatentes.push_back(h2);
+    c1.combatentes.push_back(h3);
+    c1.combatentes.push_back(h4);
+    c1.combatentes.push_back(h5);
     c1.combatentes.push_back(a1);
     c1.combatentes.push_back(a2);
     c1.combatentes.push_back(a3);
     c1.combatentes.push_back(a4);
     c1.combatentes.push_back(a5);
     
-
+random_shuffle(c1.combatentes.begin(), c1.combatentes.end());
     c1.torneio();
 
     // for (int i = 0; i< combatentes.size(); i++)

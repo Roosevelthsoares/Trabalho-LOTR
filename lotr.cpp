@@ -7,12 +7,9 @@ bruce e roosevelth
 #include <ctime>
 #include <vector>
 #include <algorithm>
-
-
 using namespace std;
 
 class Soldado{
-
     protected:
         string nome;
         int saude;
@@ -36,11 +33,12 @@ class Soldado{
 
         string getNome(){return nome;}
         int getSaude(){return saude;}
+
         void setSaude(int p){ saude = p;}
         int getVida_inicial(){return vida_inicial;}
+
         void setVida_inicial(int &p){ vida_inicial = p;}
         int getPoder(){return poder_ataque;}
-
 };
 
 class Elfo:public Soldado{
@@ -59,8 +57,7 @@ class Anao:public Soldado{
         int poder_ataque;//precisa disso?
     public:
         Anao(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude, poder_ataque+20){
-            }
+            Soldado(nome, saude, poder_ataque+20){}
             
         void atacar(Soldado &oponente){ //necessário passar por referêcia para modificar o valor
             
@@ -74,7 +71,6 @@ class Anao:public Soldado{
                 Soldado::atacar(oponente);
             }
         }
-            
 };
 
 class Humano:public Soldado{
@@ -175,68 +171,66 @@ struct Confronto{
             
             if(combatentes.size() != 1){
 
-                                cout << endl;
-                    cout << "Batalha entre " << lado1.getNome() << " (Saude: " << lado1.getSaude()<<") ";
-                    cout<< "e " << lado2.getNome() << " (Saude: " << lado2.getSaude() << ")" << endl;
+                cout << endl;
+                cout << "Batalha entre " << lado1.getNome() << " (Saude: " << lado1.getSaude()<<") ";
+                cout<< "e " << lado2.getNome() << " (Saude: " << lado2.getSaude() << ")" << endl;
 
-                    while(lado1.getSaude() > 0 && lado2.getSaude() > 0){
+                while(lado1.getSaude() > 0 && lado2.getSaude() > 0){
 
-                        if(combatentes.size() == 1)
-                            break;
+                    if(combatentes.size() == 1)
+                        break;
 
-                        if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
-                            cout << lado1.getNome() << " ataca " << lado2.getNome() << endl;
-                            lado1.atacar(lado2);
-                            if(lado2.getSaude() <= 0){
-                                cout << lado2.getNome() << " morreu. ";
-                                cout << lado1.getNome() << " venceu " << lado2.getNome()<<endl;
-                                cout << endl;
+                    if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
+                        cout << lado1.getNome() << " ataca " << lado2.getNome() << endl;
+                        lado1.atacar(lado2);
+                        if(lado2.getSaude() <= 0){
+                            cout << lado2.getNome() << " morreu. ";
+                            cout << lado1.getNome() << " venceu " << lado2.getNome()<<endl;
+                            cout << endl;
 
-                                combatentes[0].setSaude(combatentes[0].getVida_inicial());//reseta a vida
-                                combatentes.insert(combatentes.end(), combatentes[0]); //ganhador vai pro fim
-                                combatentes.erase(combatentes.begin()); //sai do inicio ganhador
-                                combatentes.erase(combatentes.begin()); //sai do inicio perdedor
-                // cout << "******* size *********"<< combatentes.size() << endl;
-                                if(combatentes.size() == 1){
-                                    cout << "CAMPEAO " << combatentes[0].getNome();
-                                    break;
-                                }
-                                    break;
-                            }else{
-                                cout << "Saude restante de "<< lado2.getNome() << " = "<<lado2.getSaude() << endl;
+                            combatentes[0].setSaude(combatentes[0].getVida_inicial());//reseta a vida
+                            combatentes.insert(combatentes.end(), combatentes[0]); //ganhador vai pro fim
+                            combatentes.erase(combatentes.begin()); //sai do inicio ganhador
+                            combatentes.erase(combatentes.begin()); //sai do inicio perdedor
+                            // cout << "******* size *********"<< combatentes.size() << endl;
+                            if(combatentes.size() == 1){
+                                cout << "CAMPEAO " << combatentes[0].getNome();
+                                break;
                             }
+                                break;
                         }
+                        else{
+                            cout << "Saude restante de "<< lado2.getNome() << " = "<<lado2.getSaude() << endl;
+                        }
+                    }
     
-                        if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
-                            cout << lado2.getNome() << " ataca " << lado1.getNome() << endl;
-                            lado2.atacar(lado1);
+                    if(lado1.getSaude() > 0 && lado2.getSaude() > 0){
+                        cout << lado2.getNome() << " ataca " << lado1.getNome() << endl;
+                        lado2.atacar(lado1);
 
-                            if(lado1.getSaude() <= 0){
-                                cout << lado1.getNome() << " morreu. ";
+                        if(lado1.getSaude() <= 0){
+                            cout << lado1.getNome() << " morreu. ";
 
-                                    cout << lado2.getNome() << " venceu " << lado1.getNome()<<endl;
-                                    cout << endl;
+                                cout << lado2.getNome() << " venceu " << lado1.getNome()<<endl;
+                                cout << endl;
 
-                                combatentes[1].setSaude(combatentes[1].getVida_inicial());//reseta a vida
-                                combatentes.insert(combatentes.end(), combatentes[1]);
-                                combatentes.erase(combatentes.begin()+1);
-                                combatentes.erase(combatentes.begin());
-                // cout << "******* size *********"<< combatentes.size() << endl;
-                                if(combatentes.size() == 1){
-
-                                    cout << "CAMPEAO " << combatentes[0].getNome();
-                                    break;
-                                }
-                                    break;
-
-                            }else{
-                                cout << "Saude restante de "<< lado2.getNome() << " = "<<lado1.getSaude() << endl;
+                            combatentes[1].setSaude(combatentes[1].getVida_inicial());//reseta a vida
+                            combatentes.insert(combatentes.end(), combatentes[1]);
+                            combatentes.erase(combatentes.begin()+1);
+                            combatentes.erase(combatentes.begin());
+                            // cout << "******* size *********"<< combatentes.size() << endl;
+                            if(combatentes.size() == 1){
+                                cout << "CAMPEAO " << combatentes[0].getNome();
+                                break;
                             }
+                                break;
                         }
-            }
- 
-                        
+                        else{
+                            cout << "Saude restante de "<< lado2.getNome() << " = "<<lado1.getSaude() << endl;
+                        }
+                    }
                 }
+            }
         }
 
         void torneio(){
@@ -279,7 +273,7 @@ int main(){
     srand(time(NULL));
 
     Sauron s1("Sauron", 7, 30);
-    Mago m1("Gandolfi", 40, 5);
+    Mago m1("Gandalf", 40, 5);
 
     Orc  o1("Orc 1", 50, 10);
     Orc  o2("Orc 2", 50, 10);

@@ -2,7 +2,6 @@
 bruce e roosevelth
 */
 
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -21,29 +20,27 @@ class Soldado{
         int poder_ataque;
     public:
         Soldado(string nome, int saude, int poder_ataque):
-            nome(nome), saude(saude),vida_inicial(saude), poder_ataque(poder_ataque){
+            nome(nome), saude(saude),vida_inicial(saude), poder_ataque(poder_ataque){}
 
-            }
         Soldado(const Soldado &p):
-            nome(p.nome), saude(p.saude), vida_inicial(p.saude), poder_ataque(p.poder_ataque){
-
-            }
+            nome(p.nome), saude(p.saude), vida_inicial(p.saude), poder_ataque(p.poder_ataque){}
 
         void atacar(Soldado &enemy){ //necessário passar por referêcia para modificar o valor
             int dano = poder_ataque;
             defender(enemy, dano);
         }
+
         void defender(Soldado &enemy, int dano){
             enemy.saude = enemy.saude - dano;
         }
 
         string getNome(){return nome;}
         int getSaude(){return saude;}
+        void setSaude(int p){ saude = p;}
         int getVida_inicial(){return vida_inicial;}
+        void setVida_inicial(int &p){ vida_inicial = p;}
         int getPoder(){return poder_ataque;}
 
-        void setSaude(int p){ saude = p;}
-        void setVida_inicial(int &p){ vida_inicial = p;}
 };
 
 class Elfo:public Soldado{
@@ -68,11 +65,12 @@ class Anao:public Soldado{
         void atacar(Soldado &oponente){ //necessário passar por referêcia para modificar o valor
             
             srand(time(0));
-            int valor = (1+rand()%10);
+            int chance = (1+rand()%100);
             
-            if(valor == 1 || valor == 2 || valor == 3 || valor == 4){ //chance de errar
+            if(chance >= 1 && chance <= 40){ //chance de errar
 
-            }else{
+            }
+            else{
                 Soldado::atacar(oponente);
             }
         }
@@ -91,10 +89,13 @@ class Humano:public Soldado{
         void atacar(Soldado &oponente){
 
             srand(time(0));
-            int valor = (1+rand()%10);
+            int chance = (1+rand()%100);
             
-            if(valor == 1){ //chance de acertar 10%
+            if(chance >= 1 && chance <= 10){ //chance de acertar 10%
                 Soldado::atacar(oponente);
+                Soldado::atacar(oponente);
+            }
+            else{
                 Soldado::atacar(oponente);
             }
         }
@@ -109,10 +110,13 @@ class Sauron:public Soldado{
 
         void atacar(Soldado &oponente){
             srand(time(0));
-            int valor = (1+rand()%10);
+            int chance = (1+rand()%100);
             
-            if(valor == 1 || valor == 2 || valor == 3){ //chance de acertar 10%
+            if(chance >= 1 && chance <= 30){ //30% de chance de acertar um ataque duplo
                 Soldado::atacar(oponente);
+                Soldado::atacar(oponente);
+            }
+            else{
                 Soldado::atacar(oponente);
             }
         }
@@ -121,15 +125,18 @@ class Sauron:public Soldado{
 class Orc:public Soldado{
     public:
         Orc(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude, poder_ataque*1.1){ //10% de bonus
+            Soldado(nome, saude, poder_ataque*1.1){ //10% de bonus de poder de ataque
                 
             }
         void atacar(Soldado &oponente){
             srand(time(0));
-            int valor = (1+rand()%10);
+            int chance = (1+rand()%100);
             
-            if(valor == 1 || valor == 2){ //chance de acertar 20%
+            if(chance >= 1 && chance <= 20){ // 20% de chance de ataque duplo
                 Soldado::atacar(oponente);
+                Soldado::atacar(oponente);
+            }
+            else{
                 Soldado::atacar(oponente);
             }
         }

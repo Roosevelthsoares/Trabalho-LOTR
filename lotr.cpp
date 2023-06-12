@@ -1,3 +1,8 @@
+/*
+bruce e roosevelth
+*/
+
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -340,7 +345,7 @@ int main(){
     c1.combatentes.push_back(a4);
     c1.combatentes.push_back(a5);
     
-random_shuffle(c1.combatentes.begin(), c1.combatentes.end());
+    random_shuffle(c1.combatentes.begin(), c1.combatentes.end());
     c1.torneio();
 
     // for (int i = 0; i< combatentes.size(); i++)

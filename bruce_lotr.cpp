@@ -93,9 +93,7 @@ class Humano:public Soldado{
 class Sauron:public Soldado{
     public:
         Sauron(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude*10, poder_ataque){
-
-            }
+            Soldado(nome, saude*10, poder_ataque){}
 
         void atacar(Soldado &oponente){
             srand(time(0));

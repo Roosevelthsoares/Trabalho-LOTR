@@ -588,42 +588,42 @@ int main(){
     Mago *gandalf = new Mago("Gandalf", 100, 20);
     Sauron *sauron = new Sauron("Sauron", 100, 50);
 
-    Orc *O1 = new Orc("O1", 100, 10);
-    Orc *O2 = new Orc("O2", 100, 10);
-    Orc *O3 = new Orc("O3", 100, 10);
-    Orc *O4 = new Orc("O4", 100, 10);
-    Orc *O5 = new Orc("O5", 100, 10);
-    Orc *O6 = new Orc("O6", 100, 10);
-    Orc *O7 = new Orc("O7", 100, 10);
-    Orc *O8 = new Orc("O8", 100, 10);
-    Orc *O9 = new Orc("O9", 100, 10);
-    Orc *O10 = new Orc("O10", 100, 10);
+    Orc *O_Pridehammer = new Orc("O_Pridehammer", 100, 10);
+    Orc *O_Bobrum = new Orc("O_Bobrum", 100, 10);
+    Orc *O_Vicnan = new Orc("O_Vicnan", 100, 10);
+    Orc *O_Otimorn = new Orc("O_Otimorn", 100, 10);
+    Orc *O_Rilug = new Orc("O_Rilug", 100, 10);
+    Orc *O_Yakgnath = new Orc("O_Yakgnath", 100, 10);
+    Orc *O_Tog = new Orc("O_Tog", 100, 10);
+    Orc *O_Dhob = new Orc("O_Dhob", 100, 10);
+    Orc *O_Ombilge = new Orc("O_Ombilge", 100, 10);
+    Orc *O_Elnan = new Orc("O_Elnan", 100, 10);
 
-    Elfo *E1 = new Elfo("E1", 100, 20);
-    Elfo *E2 = new Elfo("E2", 100, 20);
-    Elfo *E3 = new Elfo("E3", 100, 20);
-    Elfo *E4 = new Elfo("E4", 100, 20);
-    Elfo *E5 = new Elfo("E5", 100, 20);
+    Elfo *E_Balrieth = new Elfo("E_Balrieth", 100, 20);
+    Elfo *E_Mirarel = new Elfo("E_Mirarel", 100, 20);
+    Elfo *E_Shaorin = new Elfo("E_Shaorin", 100, 20);
+    Elfo *E_Aranhad = new Elfo("E_Aranhad", 100, 20);
+    Elfo *E_Elorin = new Elfo("E_Elorin", 100, 20);
 
-    Humano *H1 = new Humano("H1", 100, 20);
-    Humano *H2 = new Humano("H2", 100, 20);
-    Humano *H3 = new Humano("H3", 100, 20);
-    Humano *H4 = new Humano("H4", 100, 20);
-    Humano *H5 = new Humano("H5", 100, 20);
+    Humano *H_Xahidey = new Humano("H_Xahidey", 100, 20);
+    Humano *H_Liand = new Humano("H_Liand", 100, 20);
+    Humano *H_Tyan = new Humano("H_Tyan", 100, 20);
+    Humano *H_Jensa = new Humano("H_Jensa", 100, 20);
+    Humano *H_Barret = new Humano("H_Barret", 100, 20);
 
-    Anao *A1 = new Anao("A1",100, 20);
-    Anao *A2 = new Anao("A2",100, 20);
-    Anao *A3 = new Anao("A3",100, 20);
-    Anao *A4 = new Anao("A4",100, 20);
-    Anao *A5 = new Anao("A5",100, 20);
+    Anao *A_Thostili = new Anao("A_Thostili",100, 20);
+    Anao *A_Dolrur = new Anao("A_Dolrur",100, 20);
+    Anao *A_Boforic = new Anao("A_Boforic",100, 20);
+    Anao *A_Fruian = new Anao("A_Fruian",100, 20);
+    Anao *A_Hatrom = new Anao("A_Hatrom",100, 20);
 
 
     vector<Soldado *> guerreiros {
         gandalf, sauron,
-        O1, O2, O3, O4, O5, O6, O7, O8, O9, O10,
-        E1, E2, E3, E4, E5,
-        H1, H2, H3, H4, H5,
-        A1, A2, A3, A4, A5
+        O_Pridehammer, O_Bobrum, O_Vicnan, O_Otimorn, O_Rilug, O_Yakgnath, O_Tog, O_Dhob, O_Ombilge, O_Elnan,
+        E_Balrieth, E_Mirarel, E_Shaorin, E_Aranhad, E_Elorin,
+        H_Xahidey, H_Liand, H_Tyan, H_Jensa, H_Barret,
+        A_Thostili, A_Dolrur, A_Boforic, A_Fruian, A_Hatrom
     };
 
 

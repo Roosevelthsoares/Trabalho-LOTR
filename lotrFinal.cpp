@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <vector>
+#include <deque>
 #include <algorithm>
 #include <cctype>
 #include <random>
@@ -16,13 +16,14 @@ class Soldado{
         int saude;
         int vida_inicial;
         int poder_ataque;
+        bool evil;
 
     public:
         Soldado(string nome="soldado", int saude=100, int poder_ataque=10):
-            nome(nome), saude(saude),vida_inicial(saude), poder_ataque(poder_ataque){}
+            nome(nome), saude(saude),vida_inicial(saude), poder_ataque(poder_ataque), evil(false){}
 
         Soldado(const Soldado &p):
-            nome(p.nome), saude(p.saude), vida_inicial(p.saude), poder_ataque(p.poder_ataque){}
+            nome(p.nome), saude(p.saude), vida_inicial(p.saude), poder_ataque(p.poder_ataque), evil(p.evil){}
         
         virtual ~Soldado(){}
 
@@ -52,6 +53,8 @@ class Soldado{
         void setVidaInicial(int p){ vida_inicial = p;}
 
         int getPoder(){return poder_ataque;}
+
+        bool getEvil(){ return evil;}
 };
 
 class Elfo: public Soldado{
@@ -70,7 +73,6 @@ class Elfo: public Soldado{
             uniform_int_distribution<int> distribuicao(limiteInferior, limiteSuperior);
 
             int dano = distribuicao(gen);
-            // cout<<"Elfo "<< this->nome <<" atacando!"<<endl;
             enemy.defender(dano, *this);
         }
 
@@ -138,7 +140,6 @@ class Anao:public Soldado{
                 uniform_int_distribution<int> distribuicao(limiteInferior, limiteSuperior);
 
                 int dano = distribuicao(gen);
-                // cout<<"Anao "<<this->nome<<" ATACANDO!"<<endl;
                 enemy.defender(dano, *this);
             }
         }
@@ -323,7 +324,7 @@ class Ents: public Soldado{
 class Balrog: public Soldado{
     public:
         Balrog(string nome, int saude, int poder_ataque):
-        Soldado(nome, saude * 3, poder_ataque){}
+        Soldado(nome, saude * 3, poder_ataque){evil = true;}
 
         virtual ~Balrog(){};
 
@@ -390,7 +391,7 @@ class Balrog: public Soldado{
 class Dragao: public Soldado{
     public:
         Dragao(string nome, int saude, int poder_ataque):
-        Soldado(nome, saude * 2, poder_ataque){}
+        Soldado(nome, saude * 2, poder_ataque){evil = true;}
 
         virtual ~Dragao(){};
 
@@ -457,7 +458,7 @@ class Dragao: public Soldado{
 class Orc: public Soldado{
     public:
         Orc(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude, poder_ataque * 1.1){} //10% de bonus de poder de ataque
+            Soldado(nome, saude, poder_ataque * 1.1){evil = true;} //10% de bonus de poder de ataque
         
         virtual ~Orc(){}
 
@@ -525,7 +526,7 @@ class Orc: public Soldado{
 class Sauron: public Soldado{
     public:
         Sauron(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude*10, poder_ataque){}
+            Soldado(nome, saude*10, poder_ataque){evil = true;}
 
         virtual ~Sauron(){}
 
@@ -593,7 +594,7 @@ class Sauron: public Soldado{
 class Mago: public Soldado{ 
     public:
         Mago(string nome, int saude, int poder_ataque):
-            Soldado(nome, saude * 9, poder_ataque * 3){}
+            Soldado(nome, saude * 8, poder_ataque * 2){}
 
         virtual ~Mago(){}
 
@@ -658,66 +659,69 @@ class Mago: public Soldado{
         }
 };
 
-Soldado batalha(vector<Soldado *> &vec){
+deque<Soldado *>& batalha(deque<Soldado *> &bem, deque<Soldado *> &mal){
     int cont = 1;
-    while(vec.size() > 1){
-        srand(time(NULL));
-        random_shuffle(vec.begin(), vec.end());
+    random_shuffle(bem.begin(), bem.end());
+    random_shuffle(mal.begin(), mal.end());
 
-        auto it = vec.rbegin();
-        Soldado *guerreiro1 = *it;
-        vec.pop_back();
+    while(bem.size() != 0 && mal.size() != 0){
 
-        it = vec.rbegin();
-        Soldado *guerreiro2 = *it;
-        vec.pop_back();
+        Soldado *guerreiro_bom = bem.front();
+        bem.pop_front();
+
+        Soldado *guerreiro_mal = mal.front();
+        mal.pop_front();
         
         cout<<"==========> Batalha "<<cont<<" <=========="<<endl;
         while(true){
-            cout<< "\n" <<guerreiro1->getNome() <<" atacou "<< guerreiro2->getNome() <<"."<<endl;
-            guerreiro1->atacar(*guerreiro2);
-            cout<<"Agora "<< guerreiro2->getNome() << " tem "<<guerreiro2->getSaude()<<" de vida."<<endl;
-            if (guerreiro2->getSaude() == 0){
-                cout<<guerreiro2->getNome()<<" esta morto."<<endl;
-                vec.push_back(guerreiro1);
+            cout<< "\n" <<guerreiro_bom->getNome() <<" atacou "<< guerreiro_mal->getNome() <<"."<<endl;
+            guerreiro_bom->atacar(*guerreiro_mal);
+            cout<<"Agora "<< guerreiro_mal->getNome() << " tem "<<guerreiro_mal->getSaude()<<" de vida."<<endl;
+            if (guerreiro_mal->getSaude() == 0){
+                cout<<guerreiro_mal->getNome()<<" esta morto."<<endl;
+                bem.push_back(guerreiro_bom);
                 break;
             }
 
-            cout<< guerreiro2->getNome() <<" atacou "<< guerreiro1->getNome() <<"."<<endl;
-            guerreiro2->atacar(*guerreiro1);
-            cout<<"Agora "<< guerreiro1->getNome() << " tem "<<guerreiro1->getSaude()<<" de vida."<<endl;
-            if (guerreiro1->getSaude() == 0){
-                cout<<guerreiro1->getNome()<<" esta morto."<<endl;
-                vec.push_back(guerreiro2);
+            cout<< guerreiro_mal->getNome() <<" atacou "<< guerreiro_bom->getNome() <<"."<<endl;
+            guerreiro_mal->atacar(*guerreiro_bom);
+            cout<<"Agora "<< guerreiro_bom->getNome() << " tem "<<guerreiro_bom->getSaude()<<" de vida."<<endl;
+            if (guerreiro_bom->getSaude() == 0){
+                cout<<guerreiro_bom->getNome()<<" esta morto."<<endl;
+                mal.push_back(guerreiro_mal);
                 break;
             }
         }
         cout<<"Vencedor da batalha "<< cont <<": ";
-        if(guerreiro1->getSaude() > 0){
-            cout<<guerreiro1->getNome()<<endl;
+        if(guerreiro_bom->getSaude() != 0){
+            cout<<guerreiro_bom->getNome()<<endl;
             cout<<"\n"<<endl;
 
         }
-        else if(guerreiro2->getSaude() > 0){
-            cout<<guerreiro2->getNome();
+        else if(guerreiro_mal->getSaude() != 0){
+            cout<<guerreiro_mal->getNome();
             cout<<"\n"<<endl;
         }
 
         cont++;
     }
 
-    return *(vec.at(0));
+    if (bem.size() != 0){
+        return bem;
+    }
+    
+    return mal;
 }
 
 ostream& operator<<(ostream &os, const Soldado &s){
-    os << s.nome;
+    os << s.nome<<"-> Vida: "<< s.saude;
     return os;
 }
 
 
 int main(){
     srand(time(0));
-    Mago *Gandalf = new Mago("Gandalf", 100, 20);
+    Mago *Gandalf = new Mago("Gandalf", 100, 30);
     Sauron *sauron = new Sauron("Sauron", 100, 50);
 
     Orc *O_Pridehammer = new Orc("O_Pridehammer", 100, 10);
@@ -730,12 +734,17 @@ int main(){
     Orc *O_Dhob = new Orc("O_Dhob", 100, 10);
     Orc *O_Ombilge = new Orc("O_Ombilge", 100, 10);
     Orc *O_Elnan = new Orc("O_Elnan", 100, 10);
+    Orc *O_Wolfswift = new Orc("O_Wolfswift", 100, 10);
+    Orc *O_Wheatchewer = new Orc("O_Wheatchewer", 100, 10);
+    Orc *O_Dugorim = new Orc("O_Dugorim", 100, 10);
+    Orc *O_Shageon = new Orc("O_Shageon", 100, 10);
+    Orc *O_Muzgonk = new Orc("O_Muzgonk", 100, 10);
 
-    Elfo *E_Balrieth = new Elfo("E_Balrieth", 100, 20);
-    Elfo *E_Mirarel = new Elfo("E_Mirarel", 100, 20);
-    Elfo *E_Shaorin = new Elfo("E_Shaorin", 100, 20);
-    Elfo *E_Aranhad = new Elfo("E_Aranhad", 100, 20);
-    Elfo *E_Elorin = new Elfo("E_Elorin", 100, 20);
+    Elfo *El_Balrieth = new Elfo("El_Balrieth", 100, 20);
+    Elfo *El_Mirarel = new Elfo("El_Mirarel", 100, 20);
+    Elfo *El_Shaorin = new Elfo("El_Shaorin", 100, 20);
+    Elfo *El_Aranhad = new Elfo("El_Aranhad", 100, 20);
+    Elfo *El_Elorin = new Elfo("El_Elorin", 100, 20);
 
     Humano *H_Xahidey = new Humano("H_Xahidey", 100, 20);
     Humano *H_Liand = new Humano("H_Liand", 100, 20);
@@ -749,33 +758,45 @@ int main(){
     Anao *A_Fruian = new Anao("A_Fruian",100, 20);
     Anao *A_Hatrom = new Anao("A_Hatrom",100, 20);
 
-    Balrog *balrog = new Balrog("balrog", 100, 30);
+    Balrog *B_Balrog = new Balrog("B_Balrog", 100, 30);
+    Balrog *B_Korgrak = new Balrog("B_Korgrak", 100, 30);
 
-    Dragao *baeloth = new Dragao("Baeloth", 100, 35);
+    Dragao *D_Baeloth = new Dragao("D_Baeloth", 100, 35);
+    Dragao *D_Rorsirog = new Dragao("D_Rorsirog", 100, 35);
+    Dragao *D_Guldroim = new Dragao("D_Guldroim", 100, 35);
 
-    Ents *sindarin = new Ents("Sindarin", 100, 20);
+    Ents *E_Sindarin = new Ents("E_Sindarin", 100, 20);
+    Ents *E_Pabroth = new Ents("E_Pabroth", 100, 20);
+    Ents *E_Balvroth = new Ents("E_Balvroth", 100, 20);
+    Ents *E_Belfras = new Ents("E_Belfras", 100, 20);
+    Ents *E_Frogar = new Ents("E_Frogar", 100, 20);
 
 
-    vector<Soldado *> exercitoDeSauron {
+    deque<Soldado *> exercitoDeSauron {
         sauron,
-        O_Pridehammer, O_Bobrum, O_Vicnan, O_Otimorn, O_Rilug, O_Yakgnath, O_Tog, O_Dhob, O_Ombilge, O_Elnan,
-        balrog,
-        baeloth,
+        O_Pridehammer, O_Bobrum, O_Vicnan, O_Otimorn, O_Rilug, O_Yakgnath, O_Tog,
+        O_Dhob, O_Ombilge, O_Elnan,O_Wolfswift,O_Wheatchewer, O_Dugorim,O_Shageon,O_Muzgonk,
+        B_Balrog, B_Korgrak,
+        D_Baeloth, D_Rorsirog, D_Guldroim
     };
 
-    vector<Soldado *> sociedadeDoAnel{
+    deque<Soldado *> sociedadeDoAnel{
         Gandalf,
-        E_Balrieth, E_Mirarel, E_Shaorin, E_Aranhad, E_Elorin,
+        El_Balrieth, El_Mirarel, El_Shaorin, El_Aranhad, El_Elorin,
         H_Xahidey, H_Liand, H_Tyan, H_Jensa, H_Barret,
         A_Thostili, A_Dolrur, A_Boforic, A_Fruian, A_Hatrom,
-        sindarin
+        E_Sindarin, E_Pabroth, E_Balvroth, E_Belfras, E_Frogar
     };
 
 
-    Soldado vencedor = batalha(exercitoDeSauron);
-    string nomeVencedor = vencedor.getNome();
-    transform(nomeVencedor.begin(), nomeVencedor.end(), nomeVencedor.begin(), ::toupper);
-    cout<<"\n\nO grande vencedor da batalha eh "<< nomeVencedor <<"!"<<endl;
+    deque<Soldado *> exercitoVencedor = batalha(sociedadeDoAnel, exercitoDeSauron);
+    string nomeVencedor = (exercitoVencedor.at(0)->getEvil()) ? "o EXERCITO DE SAURON" : "a SOCIEDADE DO ANEL";
+    cout<<"\n\nO exercito vencedor da batalha foi "<< nomeVencedor <<"!"<<endl;
+    cout<<"Lista de sobreviventes: "<<endl;
 
+    auto it = exercitoVencedor.begin();
+    for(it; it != exercitoVencedor.end(); it++){
+        cout<< (*it)->getNome() << " -> vida: "<< (*it)->getSaude() <<endl;
+    }
     return 0;
 }

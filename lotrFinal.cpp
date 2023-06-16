@@ -92,8 +92,8 @@ class Elfo: public Soldado{
                     }
                     break;
                 }
-                case 2:{ /* CHANCE DE DESVIO 30% */
-                    if(chance >= 35 && chance <= 65){
+                case 2:{ /* CHANCE DE DESVIO 40% */
+                    if(chance >= 30 && chance <= 70){
                         cout<<"O elfo "<< nome <<" DESVIOU do ataque."<<endl;
                     }
                     else{
@@ -208,7 +208,6 @@ class Humano:public Soldado{
                 dano *= 2;
                 cout<<enemy.getNome()<<" tomou um ATAQUE DUPLO!"<<endl;
             }
-            // cout<<"Humano "<<this->nome<<" ATACANDO!"<<endl;
             enemy.defender(dano, *this);
         }
 
@@ -246,6 +245,207 @@ class Humano:public Soldado{
                 case 3:{ /* CHANCE DE CONTRA-ATAQUE 30% */
                     if(chance >= 35 && chance <= 65){
                         cout<<"O humano "<< nome <<" CONTRA ATACOU."<<endl;
+                        atacar(atacker);
+                    }
+                    break;
+                }
+            }
+        }
+};
+
+class Ents: public Soldado{
+    public:
+        Ents(string nome, int saude, int poder_ataque):
+        Soldado(nome, saude*1.5, poder_ataque*0.5){}
+
+        virtual ~Ents(){};
+
+        virtual void atacar(Soldado &enemy) override {
+            int chance = (1+rand()%100);
+            
+            mt19937 gen(rand());
+
+            int limiteInferior = (int)(poder_ataque - (poder_ataque * 0.2));
+            int limiteSuperior = (int)(poder_ataque + (poder_ataque * 0.2));
+
+            uniform_int_distribution<int> distribuicao(limiteInferior, limiteSuperior);
+            int dano = distribuicao(gen);
+
+            if(chance >= 46 && chance <= 54){ // 8% de chance de ataque duplo
+                dano *= 2;
+                cout<<enemy.getNome()<<" tomou um ATAQUE DUPLO!"<<endl;
+            }
+            enemy.defender(dano, *this);
+        }
+
+        virtual void defender(int dano, Soldado &atacker) override {
+            int chance = 1 + rand() % 100;
+            int defesa = 1 + rand() % 3;
+
+            switch(defesa){
+                case 1:{ /* CHANCE DE BLOQUEIO 40% */
+                    if(chance >= 30 && chance <= 70){
+                        cout<<"O ent "<< nome <<" BLOQUEOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O ent "<< nome <<" tentou BLOQUEAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 2:{ /* CHANCE DE DESVIO 6% */
+                    if(chance >= 47 && chance <= 53){
+                        cout<<"O ent "<< nome <<" DESVIOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O ent "<< nome <<" tentou DESVIAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 3:{ /* CHANCE DE CONTRA-ATAQUE 10% */
+                    if(chance >= 45 && chance <= 55){
+                        cout<<"O ent "<< nome <<" CONTRA ATACOU."<<endl;
+                        atacar(atacker);
+                    }
+                    break;
+                }
+            }
+        }
+};
+
+class Balrog: public Soldado{
+    public:
+        Balrog(string nome, int saude, int poder_ataque):
+        Soldado(nome, saude * 3, poder_ataque){}
+
+        virtual ~Balrog(){};
+
+        virtual void atacar(Soldado &enemy) override {
+            int chance = (1+rand()%100);
+            
+            mt19937 gen(rand());
+
+            int limiteInferior = (int)(poder_ataque - (poder_ataque * 0.2));
+            int limiteSuperior = (int)(poder_ataque + (poder_ataque * 0.2));
+
+            uniform_int_distribution<int> distribuicao(limiteInferior, limiteSuperior);
+            int dano = distribuicao(gen);
+
+            if(chance >= 37 && chance <= 63){ // 26% de chance de ataque duplo
+                dano *= 2;
+                cout<<enemy.getNome()<<" tomou um ATAQUE DUPLO!"<<endl;
+            }
+            enemy.defender(dano, *this);
+        }
+
+        virtual void defender(int dano, Soldado &atacker) override {
+            int chance = 1 + rand() % 100;
+            int defesa = 1 + rand() % 3;
+
+            switch(defesa){
+                case 1:{ /* CHANCE DE BLOQUEIO 30% */
+                    if(chance >= 35 && chance <= 65){
+                        cout<<"O balrog "<< nome <<" BLOQUEOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O balrog "<< nome <<" tentou BLOQUEAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 2:{ /* CHANCE DE DESVIO 6% */
+                    if(chance >= 47 && chance <= 53){
+                        cout<<"O balrog "<< nome <<" DESVIOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O balrog "<< nome <<" tentou DESVIAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 3:{ /* CHANCE DE CONTRA-ATAQUE 10% */
+                    if(chance >= 45 && chance <= 55){
+                        cout<<"O balrog "<< nome <<" CONTRA ATACOU."<<endl;
+                        atacar(atacker);
+                    }
+                    break;
+                }
+            }
+        }
+};
+
+class Dragao: public Soldado{
+    public:
+        Dragao(string nome, int saude, int poder_ataque):
+        Soldado(nome, saude * 2, poder_ataque){}
+
+        virtual ~Dragao(){};
+
+        virtual void atacar(Soldado &enemy) override {
+            int chance = (1+rand()%100);
+            
+            mt19937 gen(rand());
+
+            int limiteInferior = (int)(poder_ataque - (poder_ataque * 0.2));
+            int limiteSuperior = (int)(poder_ataque + (poder_ataque * 0.2));
+
+            uniform_int_distribution<int> distribuicao(limiteInferior, limiteSuperior);
+            int dano = distribuicao(gen);
+
+            if(chance >= 45 && chance <= 55){ // 20% de chance de ataque duplo
+                dano *= 2;
+                cout<<enemy.getNome()<<" tomou um ATAQUE DUPLO!"<<endl;
+            }
+            enemy.defender(dano, *this);
+        }
+
+        virtual void defender(int dano, Soldado &atacker) override {
+            int chance = 1 + rand() % 100;
+            int defesa = 1 + rand() % 3;
+
+            switch(defesa){
+                case 1:{ /* CHANCE DE BLOQUEIO 8% */
+                    if(chance >= 46 && chance <= 54){
+                        cout<<"O dragao "<< nome <<" BLOQUEOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O dragao "<< nome <<" tentou BLOQUEAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 2:{ /* CHANCE DE DESVIO 16% */
+                    if(chance >= 42 && chance <= 58){
+                        cout<<"O dragao "<< nome <<" DESVIOU o ataque."<<endl;
+                    }
+                    else{
+                        saude -=  dano;
+                        cout<<"O dragao "<< nome <<" tentou DESVIAR, mas nao conseguiu!"<<endl;
+                        if(saude < 0){
+                            saude = 0;
+                        }
+                    }
+                    break;
+                }
+                case 3:{ /* CHANCE DE CONTRA-ATAQUE 8% */
+                    if(chance >= 46 && chance <= 54){
+                        cout<<"O dragao "<< nome <<" CONTRA ATACOU."<<endl;
                         atacar(atacker);
                     }
                     break;
@@ -458,28 +658,6 @@ class Mago: public Soldado{
         }
 };
 
-// class Bem{
-//     protected:
-//         void poderProtagonista(){
-
-//         }
-
-//         void ataqueCombinado(){
-
-//         }
-
-// };
-
-// class Mal{
-//     protected:
-
-// };
-
-// class MuitoMal{
-//     protected:
-
-// };
-
 Soldado batalha(vector<Soldado *> &vec){
     int cont = 1;
     while(vec.size() > 1){
@@ -571,17 +749,30 @@ int main(){
     Anao *A_Fruian = new Anao("A_Fruian",100, 20);
     Anao *A_Hatrom = new Anao("A_Hatrom",100, 20);
 
+    Balrog *balrog = new Balrog("balrog", 100, 30);
 
-    vector<Soldado *> guerreiros {
-        Gandalf, sauron,
+    Dragao *baeloth = new Dragao("Baeloth", 100, 35);
+
+    Ents *sindarin = new Ents("Sindarin", 100, 20);
+
+
+    vector<Soldado *> exercitoDeSauron {
+        sauron,
         O_Pridehammer, O_Bobrum, O_Vicnan, O_Otimorn, O_Rilug, O_Yakgnath, O_Tog, O_Dhob, O_Ombilge, O_Elnan,
+        balrog,
+        baeloth,
+    };
+
+    vector<Soldado *> sociedadeDoAnel{
+        Gandalf,
         E_Balrieth, E_Mirarel, E_Shaorin, E_Aranhad, E_Elorin,
         H_Xahidey, H_Liand, H_Tyan, H_Jensa, H_Barret,
-        A_Thostili, A_Dolrur, A_Boforic, A_Fruian, A_Hatrom
+        A_Thostili, A_Dolrur, A_Boforic, A_Fruian, A_Hatrom,
+        sindarin
     };
 
 
-    Soldado vencedor = batalha(guerreiros);
+    Soldado vencedor = batalha(exercitoDeSauron);
     string nomeVencedor = vencedor.getNome();
     transform(nomeVencedor.begin(), nomeVencedor.end(), nomeVencedor.begin(), ::toupper);
     cout<<"\n\nO grande vencedor da batalha eh "<< nomeVencedor <<"!"<<endl;
